@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="panel">
+  <div class="panel-header">
+    <div class="dropdown-container">
+      <div class="dropdown-group">
+        <label for="schema-dropdown">Schema:</label>
+        <select id="schema-dropdown" class="dropdown">
+          <option value="schema1">Schema 1</option>
+          <option value="schema2">Schema 2</option>
+          <option value="schema3">Schema 3</option>
+        </select>
+      </div>
+      <div class="dropdown-group">
+        <label for="table-dropdown">Table:</label>
+        <select id="table-dropdown" class="dropdown">
+          <option value="table1">Table 1</option>
+          <option value="table2">Table 2</option>
+          <option value="table3">Table 3</option>
+        </select>
+      </div>
+      <div class="dropdown-group">
+        <label for="column-dropdown">Column:</label>
+        <select id="column-dropdown" class="dropdown">
+          <option value="column1">Column 1</option>
+          <option value="column2">Column 2</option>
+          <option value="column3">Column 3</option>
+        </select>
+      </div>
+      <div class="custom-dropdown" id="dp1">
+        <label for="column-dropdown">Rules :</label>
+        <button onclick="toggleDropdown('dropdownContent1')" class="dropbtn">select rules</button>
+        <div id="dropdownContent1" class="dropdown-content">
+          <label><input type="checkbox" value="option1"> Option 1</label>
+          <label><input type="checkbox" value="option2"> Option 2</label>
+          <label><input type="checkbox" value="option3"> Option 3</label>
+          <label><input type="checkbox" value="option1"> Option 1</label>
+          <label><input type="checkbox" value="option2"> Option 2</label>
+          <label><input type="checkbox" value="option3"> Option 3</label>
+          <label><input type="checkbox" value="option1"> Option 1</label>
+          <label><input type="checkbox" value="option2"> Option 2</label>
+          <label><input type="checkbox" value="option3"> Option 3</label>
+        </div>
+      </div>
+      <button class="appl" onclick="apply()">Apply</button>
+    </div>
+  </div>
+  <div class="tab">
+    <!-- Data Grid -->
+    <table class="data-grid" id="dataGrid">
+      <thead>
+      <tr>
+        <th>Schema</th>
+        <th>Table</th>
+        <th>Column</th>
+        <th>Remove</th> <!-- New column header for remove button -->
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Rows will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+  <div class="panel-footer">
+  </div>
+</div>
+
+<script>
+
+ function toggleDropdown(dropdownId) {
+    var dropdownContent = document.getElementById(dropdownId);
+    if (dropdownContent.style.display === "block") {
+      dropdownContent.style.display = "none";
+    } else {
+      dropdownContent.style.display = "block";
+    }
+  }
+
+  // Close dropdowns when clicking outside of them
+  document.addEventListener("click", function(event) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+      if (!event.target.matches('.dropbtn') && !dropdowns[i].contains(event.target)) {
+        dropdowns[i].style.display = "none";
+      }
+    }
+  });
+
+  // Function to update the data grid with selected dropdown values
+  // Function to remove the row when the remove button is clicked
+function removeRow(row) {
+  row.parentNode.removeChild(row);
+}
+
+// Function to update the data grid with selected dropdown values
+function updateDataGrid() {
+  var dropdown1 = document.getElementById("schema-dropdown").value;
+  var dropdown2 = document.getElementById("table-dropdown").value;
+  var dropdown3 = document.getElementById("column-dropdown").value;
+  var table = document.getElementById("dataGrid").getElementsByTagName('tbody')[0];
+
+  // Check if the combination already exists in the table
+  var rows = table.getElementsByTagName('tr');
+  for (var i = 0; i < rows.length; i++) {
+    var cells = rows[i].getElementsByTagName('td');
+    if (cells[0].textContent === dropdown1 &&
+        cells[1].textContent === dropdown2 &&
+        cells[2].textContent === dropdown3) {
+      alert("This combination already exists!");
+      return; // Exit the function if the combination exists
+    }
+  }
+
+  // Create a new row
+  var newRow = table.insertRow();
+  var cell1 = newRow.insertCell(0);
+  var cell2 = newRow.insertCell(1);
+  var cell3 = newRow.insertCell(2);
+  var cell4 = newRow.insertCell(3);
+
+  // Populate cells with selected dropdown values
+  cell1.textContent = dropdown1;
+  cell2.textContent = dropdown2;
+  cell3.textContent = dropdown3;
+
+  // Create remove button
+  var removeBtn = document.createElement("button");
+  removeBtn.textContent = "Remove";
+  removeBtn.className = "remove-btn";
+  removeBtn.onclick = function() {
+    removeRow(newRow); // Call removeRow function passing the row to be removed
+  };
+
+  // Append remove button to cell
+  cell4.appendChild(removeBtn);
+}
+
+// Function to display the data grid and update the table on Apply button click
+function apply() {
+  updateDataGrid();
+  var dataGrid = document.getElementById("dataGrid");
+  dataGrid.style.display = "table";
+}
+
+</script>
+</body>
+<style>
+ .dropdown-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  border-radius: 2px;
+  padding-top: 15px;
+}
+
+.dropdown-group {
+  margin-right: 5%;
+  margin-bottom: 1%;
+}
+
+.dropdown {
+  width: 150px;
+  height: 25px;
+}
+.mutliSelect{
+  position: absolute;
+  top:50%;
+  transform: translateY(-50%);
+}
+@media screen and (max-width: 600px) {
+  .dropdown-group {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+.custom-dropdown {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1;
+    max-height: 200px; /* Set maximum height for dropdown */
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+  .dropdown-content label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  /* Responsive styles */
+  @media screen and (max-width: 600px) {
+    .custom-dropdown {
+      display: block;
+    }
+    .dropdown-content {
+      width: 100%;
+      max-width: none;
+      min-width: auto;
+    }
+  }
+
+
+  /* Panel container */
+  .panel {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    width: 95%;
+    margin: 20px auto; /* Center the panel horizontally */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
+    height : 100%;
+  }
+
+  /* Panel header */
+  .panel-header {
+    background-color: #ccc;
+    padding: 5px;
+    border-radius: 5px 5px 0 0; /* Round top corners */
+    margin-bottom: 10px;
+  }
+
+
+  /* Panel footer */
+  .panel-footer {
+    background-color: #ccc;
+    padding: 10px;
+    border-radius: 0 0 5px 5px; /* Round bottom corners */
+    margin-top: 35%;
+    text-align: right;
+    height: 25%;
+  }
+  .btn{
+    margin-left: 10%;
+  }
+    /* Style for the data grid */
+    .data-grid {
+    display: none; /*Hide the data grid initially */
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Style for the table header */
+  .data-grid th {
+    background-color: #f2f2f2;
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  /* Style for the table data */
+  .data-grid td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  /* Style for alternating rows */
+  .data-grid tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  .A{
+    margin-left: 35%;
+  }
+
+  /* Style for remove button */
+  .remove-btn {
+    background-color: #ff0000;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .tab{
+    width: 80%;
+    height: 20%;
+  }
+  .dropbtn{
+    height: 30px;
+  }
+  .appl{
+    height: 30px;
+  }
+  </style>
+
+</html>

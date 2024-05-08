@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+ .dropdown-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  border-radius: 2px;
+  padding-top: 15px;
+}
+
+.dropdown-group {
+  margin-right: 5%;
+  margin-bottom: 1%;
+}
+
+.dropdown {
+  width: 150px;
+  height: 25px;
+}
+.mutliSelect{
+  position: absolute;
+  top:50%;
+  transform: translateY(-50%);
+}
+@media screen and (max-width: 600px) {
+  .dropdown-group {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+.custom-dropdown {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 180px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1;
+    max-height: 200px; /* Set maximum height for dropdown */
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+  .dropdown-content label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  /* Responsive styles */
+  @media screen and (max-width: 600px) {
+    .custom-dropdown {
+      display: block;
+    }
+    .dropdown-content {
+      width: 100%;
+      max-width: none;
+      min-width: auto;
+    }
+  }
+
+
+  /* Panel container */
+  .panel {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    width: 95%;
+    margin: 20px auto; /* Center the panel horizontally */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
+    height : 100%;
+  }
+
+  /* Panel header */
+  .panel-header {
+    background-color: #ccc;
+    padding: 5px;
+    border-radius: 5px 5px 0 0; /* Round top corners */
+    margin-bottom: 10px;
+  }
+
+
+  /* Panel footer */
+  .panel-footer {
+    background-color: #ccc;
+    padding: 10px;
+    border-radius: 0 0 5px 5px; /* Round bottom corners */
+    margin-top: 35%;
+    text-align: right;
+    height: 25%;
+  }
+  .btn{
+    margin-left: 10%;
+  }
+    /* Style for the data grid */
+    .data-grid {
+    display: none; /*Hide the data grid initially */
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Style for the table header */
+  .data-grid th {
+    background-color: #f2f2f2;
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  /* Style for the table data */
+  .data-grid td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  /* Style for alternating rows */
+  .data-grid tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  .A{
+    margin-left: 35%;
+  }
+
+  /* Style for remove button */
+  .remove-btn {
+    background-color: #ff0000;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .tab{
+    width: 80%;
+    height: 20%;
+  }
+  .dropbtn{
+    height: 30px;
+  }
+  .appl{
+    height: 30px;
+  }
+  .submit-btn {
+  background-color: blue;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  padding-bottom: 5px;
+  border-radius: 50px; /* This creates an oval shape */
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: darkblue;
+}
+
+.appl {
+  background-color: blue;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  padding-bottom: 5px;
+  border-radius: 50px; /* This creates an oval shape */
+  cursor: pointer;
+}
+
+.appl:hover {
+  background-color: darkblue;/* Change background color on hover */
+}
+.image-container img:nth-child(1) {
+  transform: translateY(5px);
+}
+
+
+
+
+
+  </style>
+
+</head>
+<body>
+<div class="panel">
+    <div class="panel-header">
+        <div class="dropdown-container">
+            <div class="dropdown-group">
+                <label for="schema-dropdown">Schema:</label>
+                <select id="schema-dropdown" class="dropdown">
+                    <option value="schema1">public</option>
+                    <option value="schema2">Star</option>
+                    <option value="schema3">Delta</option>
+                </select>
+            </div>
+            <div class="dropdown-group">
+                <label for="table-dropdown">Table:</label>
+                <select id="table-dropdown" class="dropdown"> jgst4k k
+                    <option value="table1">input</option>
+                    <option value="table2">input_entity</option>
+                    <option value="table3">profile_schema</option>
+                </select>
+            </div>
+            <div class="dropdown-group">
+                <label for="column-dropdown">Column:</label>
+                <select id="column-dropdown" class="dropdown">
+                    <option value="column1">id</option>
+                    <option value="column2">name</option>
+                    <option value="column3">date</option>
+                </select>
+            </div>
+            <div class="custom-dropdown" id="dp1">
+                <label for="column-dropdown">Checks :</label>
+                <button onclick="toggleDropdown('dropdownContent1')" class="dropbtn">select checks</button>
+                <div id="dropdownContent1" class="dropdown-content">
+                    <label><input type="checkbox" value="Null_Count">Null_Count</label>
+                    <label><input type="checkbox" value="Blank_Count"> Blank_Count</label>
+                    <label><input type="checkbox" value="Distinct_Count"> Distinct_Count</label>
+                    <label><input type="checkbox" value="Start_Lower_Case"> Start_Lower_Case</label>
+                    <label><input type="checkbox" value="Start_Upper_Case"> Start_Upper_Case</label>
+                    <label><input type="checkbox" value="Alpha_Numeric_Chk"> Alpha_Numeric_Chk</label>
+                    <label><input type="checkbox" value="Only_Numeric_Chk"> Only_Numeric_Chk</label>
+                    <label><input type="checkbox" value="Email_Pattern_Chk"> Email_Pattern_Chk</label>
+                    <label><input type="checkbox" value="Special_Char_Chk"> Special_Char_Chk</label>
+                    <label><input type="checkbox" value="Min_value"> Min_value</label>
+                    <label><input type="checkbox" value="Max_value"> Max_value</label>
+                    <label><input type="checkbox" value="Avg"> Avg</label>
+                </div>
+            </div>
+            <button  class="appl" onclick="apply()" style="background-color: blue; color: white; border-radius: 20px; padding: 10px 20px; border: none;">Apply</button>
+
+        </div>
+
+    </div>
+    <div class="tab">
+        <!-- Data Grid -->
+        <table class="data-grid" id="dataGrid">
+            <thead>
+            <tr>
+                <th>Schema</th>
+                <th>Table</th>
+                <th>Column</th>
+                <th>Checks</th>
+                <th>Remove</th> <!-- New column header for remove button -->
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-footer" style="height: 100px; position: relative;">
+        <p style="position: absolute; left: 50%; transform: translateX(-50%);">Powered by <img src="https://www.capgemini.com/wp-content/themes/capgemini2020/assets/images/logo.svg" alt="First Image"> and <img src="https://res.cloudinary.com/talend/image/upload/q_auto/v1700581361/qlik/testing/glossary/Qlik_Logo_Trademark_2_Color_Positive_RGB_2_itwa1t_cibcft.svg" alt=""></p>
+        <button type="submit" class="submit-btn" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%);">Submit</button>
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+
+// Function to toggle the visibility of the dropdown
+function toggleDropdown(dropdownId) {
+  var dropdownContent = document.getElementById(dropdownId);
+  dropdownContent.style.display = dropdownContent.style.display === "block" ? "none" : "block";
+}
+
+// Function to remove the row when the remove button is clicked
+function removeRow(row) {
+  row.parentNode.removeChild(row);
+}
+
+// Function to retrieve selected checkbox values
+function getSelectedCheckboxes() {
+  var checks = Array.from(document.querySelectorAll("#dropdownContent1 input[type='checkbox']:checked")).map(checkbox => checkbox.value);
+  return checks;
+}
+
+// Function to update the data grid with selected dropdown values
+function updateDataGrid() {
+  var schema = document.getElementById("schema-dropdown").value;
+  var selectedTable = document.getElementById("table-dropdown").value; // Renamed variable
+  var column = document.getElementById("column-dropdown").value;
+  var checks = getSelectedCheckboxes().join(', '); // Get selected checkboxes and join them into a string
+
+  var tableBody = document.getElementById("dataGrid").getElementsByTagName('tbody')[0]; // Changed variable name
+
+  // Check if the combination already exists in the table
+  var rows = tableBody.getElementsByTagName('tr');
+  for (var i = 0; i < rows.length; i++) {
+    var cells = rows[i].getElementsByTagName('td');
+    if (cells[0].textContent === schema &&
+        cells[1].textContent === selectedTable && // Updated variable name
+        cells[2].textContent === column &&
+        cells[3].textContent === checks) {
+      alert("This combination already exists!");
+      return; // Exit the function if the combination exists
+    }
+  }
+
+  // Create a new row
+  var newRow = tableBody.insertRow();
+  var cell1 = newRow.insertCell(0);
+  var cell2 = newRow.insertCell(1);
+  var cell3 = newRow.insertCell(2);
+  var cell4 = newRow.insertCell(3);
+  var cell5 = newRow.insertCell(4); // New cell for remove button
+
+  // Populate cells with selected dropdown values
+  cell1.textContent = schema;
+  cell2.textContent = selectedTable; // Updated variable name
+  cell3.textContent = column;
+  cell4.textContent = checks;
+
+  // Create remove button
+  var removeBtn = document.createElement("button");
+  removeBtn.textContent = "Remove";
+  removeBtn.className = "remove-btn";
+  removeBtn.onclick = function() {
+    removeRow(newRow); // Call removeRow function passing the row to be removed
+  };
+
+  // Append remove button to cell
+  cell5.appendChild(removeBtn);
+}
+
+// Function to reset the dropdown values
+function resetDropdowns() {
+  document.getElementById("schema-dropdown").value = "";
+  document.getElementById("table-dropdown").value = "";
+  document.getElementById("column-dropdown").value = "";
+
+  // Also reset the selected checkboxes in the checks dropdown
+  var checkboxes = document.querySelectorAll("#dropdownContent1 input[type='checkbox']");
+  checkboxes.forEach(function(checkbox) {
+    checkbox.checked = false;
+  });
+}
+
+// Function to display the data grid and update the table on Apply button click
+function apply() {
+  // Check if any dropdown has no selected value
+  var schemaValue = document.getElementById("schema-dropdown").value;
+  var tableValue = document.getElementById("table-dropdown").value;
+  var columnValue = document.getElementById("column-dropdown").value;
+  var checks = getSelectedCheckboxes();
+
+  if (!schemaValue || !tableValue || !columnValue || checks.length === 0) {
+    alert("Items not selected");
+    return;
+  }
+
+  // If all dropdowns have selected values, update the data grid
+  updateDataGrid();
+  var dataGrid = document.getElementById("dataGrid");
+  dataGrid.style.display = "table";
+
+  resetDropdowns(); // Reset dropdown values after applying
+}
+</script>
+</body>
+</html>
